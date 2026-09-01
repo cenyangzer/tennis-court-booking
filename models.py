@@ -14,7 +14,7 @@ class User(db.Model):
     phone = db.Column(db.String(20))
     is_admin = db.Column(db.Boolean, default=False)
     is_active = db.Column(db.Boolean, default=True)  # 用户是否激活
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
     
     # 关联预约记录
     bookings = db.relationship('Booking', backref='user', lazy=True)
@@ -57,7 +57,7 @@ class Booking(db.Model):
     end_time = db.Column(db.DateTime, nullable=False)
     total_amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(20), default='pending')  # pending, confirmed, canceled, completed
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
     payment_status = db.Column(db.String(20), default='unpaid')  # unpaid, paid, refunded
     order_no = db.Column(db.String(50))  # 支付订单号
     refund_amount = db.Column(db.Float, default=0.0)  # 实际退款金额
@@ -73,7 +73,7 @@ class Review(db.Model):
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'), nullable=False)
     rating = db.Column(db.Integer, nullable=False)  # 1-5星
     comment = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
     
     # 关联
     user = db.relationship('User', backref='reviews')
@@ -92,7 +92,7 @@ class CourtAvailability(db.Model):
     end_time = db.Column(db.Time, nullable=False)
     is_available = db.Column(db.Boolean, default=True)  # True表示可用
     booking_id = db.Column(db.Integer, db.ForeignKey('booking.id'), nullable=True)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     
     def __repr__(self):
         return f'<CourtAvailability Court {self.court_id} - {self.date} {self.start_time}-{self.end_time}>'
@@ -102,8 +102,8 @@ class Notice(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     is_active = db.Column(db.Boolean, default=True)
     
     def __repr__(self):

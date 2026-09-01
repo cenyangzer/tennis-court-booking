@@ -198,10 +198,10 @@
         });
     });
 
-    // 实现轮播图自动轮播（如果没有使用Bootstrap的自动轮播）
+    // 实现轮播图自动轮播（bootstrap 未加载时跳过，避免脚本中断）
     const carousel = document.querySelector('#carouselExampleIndicators');
-    if (carousel) {
-        const carouselInstance = new bootstrap.Carousel(carousel, {
+    if (carousel && typeof bootstrap !== 'undefined' && bootstrap.Carousel) {
+        new bootstrap.Carousel(carousel, {
             interval: 5000,
             wrap: true
         });

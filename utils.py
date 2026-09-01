@@ -132,11 +132,9 @@ def get_current_user():
 
 # 格式化日期时间显示
 def format_datetime(dt, format_str='%Y-%m-%d %H:%M'):
-    """格式化日期时间显示，将UTC时间转换为北京时间"""
+    """格式化日期时间显示（系统内统一使用本地时间存储）"""
     if isinstance(dt, datetime):
-        # 将UTC时间转换为北京时间（UTC+8）
-        beijing_time = dt + timedelta(hours=8)
-        return beijing_time.strftime(format_str)
+        return dt.strftime(format_str)
     return dt
 
 # 格式化价格显示

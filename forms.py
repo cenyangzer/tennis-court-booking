@@ -156,9 +156,6 @@ class BookingForm(FlaskForm):
                 
         except Exception as e:
             # 提供更详细的错误信息
-            import traceback
-            print(f"时间处理错误: {str(e)}")
-            print(traceback.format_exc())
             self.start_time_str.errors.append(f'时间处理过程中出现错误: {str(e)}')
             return False
         

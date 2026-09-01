@@ -2,9 +2,9 @@ from flask import Flask, render_template, redirect, url_for, flash, request, ses
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from models import db, User, Court, Booking, Review, Notice
+from models import db, User, Court, Booking, Review, Notice, CourtAvailability
 from forms import LoginForm, RegistrationForm, BookingForm, ReviewForm, UserProfileForm, CourtForm, NoticeForm, UserForm, AddUserForm, PasswordChangeForm
-from utils import login_required, admin_required, get_current_user, calculate_booking_cost, format_datetime, format_price, get_status_text
+from utils import login_required, admin_required, get_current_user, calculate_booking_cost, format_datetime, format_price, get_status_text, allowed_file
 import uuid  # 用于生成支付订单号
 
 def init_routes(app):
@@ -440,16 +440,21 @@ def init_routes(app):
             # 处理文件上传
             if 'image' in request.files and request.files['image'].filename:
                 image = request.files['image']
-                # 生成唯一文件名
+                # 校验文件类型
+                if not allowed_file(image.filename, app.config['ALLOWED_EXTENSIONS']):
+                    flash('不支持的图片格式，仅支持 png/jpg/jpeg/gif', 'danger')
+                    return render_template('admin/edit_court.html', form=form, court=court)
+                # 生成带时间戳的唯一文件名，防止覆盖
                 filename = secure_filename(image.filename)
+                filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{filename}"
                 # 确保上传目录存在
                 upload_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'courts')
                 os.makedirs(upload_dir, exist_ok=True)
                 # 保存文件
                 image_path = os.path.join(upload_dir, filename)
                 image.save(image_path)
-                # 更新场地图片路径
-                court.image = filename
+                # 更新场地图片路径（模板按 uploads/ + image_url 拼接）
+                court.image_url = f'courts/{filename}'
             
             form.populate_obj(court)
             db.session.commit()

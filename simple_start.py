@@ -15,7 +15,6 @@ def main():
 
     # 创建必要目录
     os.makedirs(os.path.join("static", "uploads", "courts"), exist_ok=True)
-    os.makedirs("instance", exist_ok=True)
     print("Directories created")
 
     # 仅在依赖缺失时安装
