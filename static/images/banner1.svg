@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7db9e8"/>
+      <stop offset="1" stop-color="#d3ecff"/>
+    </linearGradient>
+    <linearGradient id="court" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f7fb8"/>
+      <stop offset="1" stop-color="#1f5a88"/>
+    </linearGradient>
+    <linearGradient id="overlay" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0a2540" stop-opacity="0.72"/>
+      <stop offset="0.55" stop-color="#0a2540" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#0a2540" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="400" fill="url(#sky)"/>
+  <ellipse cx="220" cy="70" rx="80" ry="22" fill="#ffffff" opacity="0.8"/>
+  <ellipse cx="880" cy="55" rx="100" ry="25" fill="#ffffff" opacity="0.65"/>
+  <!-- 远处围网 -->
+  <rect x="40" y="120" width="1120" height="110" fill="none" stroke="#54656f" stroke-width="5"/>
+  <g stroke="#54656f" stroke-width="1" opacity="0.4">
+    <line x1="40" y1="145" x2="1160" y2="145"/><line x1="40" y1="175" x2="1160" y2="175"/>
+    <line x1="40" y1="205" x2="1160" y2="205"/><line x1="200" y1="120" x2="200" y2="230"/>
+    <line x1="400" y1="120" x2="400" y2="230"/><line x1="600" y1="120" x2="600" y2="230"/>
+    <line x1="800" y1="120" x2="800" y2="230"/><line x1="1000" y1="120" x2="1000" y2="230"/>
+  </g>
+  <!-- 场地 -->
+  <polygon points="180,230 1020,230 1200,400 0,400" fill="url(#court)"/>
+  <polygon points="180,230 1020,230 1200,400 0,400" fill="none" stroke="#e8f4f8" stroke-width="4"/>
+  <polygon points="320,230 880,230 1000,400 200,400" fill="#3a8fc4" opacity="0.5"/>
+  <g stroke="#e8f4f8" stroke-width="3">
+    <line x1="320" y1="230" x2="200" y2="400"/>
+    <line x1="880" y1="230" x2="1000" y2="400"/>
+    <line x1="260" y1="320" x2="940" y2="320"/>
+    <line x1="290" y1="275" x2="910" y2="275"/>
+  </g>
+  <!-- 球网 -->
+  <rect x="300" y="196" width="8" height="40" fill="#25313b"/>
+  <rect x="892" y="196" width="8" height="40" fill="#25313b"/>
+  <rect x="306" y="200" width="588" height="30" fill="#eef2f4" opacity="0.92"/>
+  <g stroke="#96a2ab" stroke-width="1">
+    <line x1="330" y1="200" x2="330" y2="230"/><line x1="370" y1="200" x2="370" y2="230"/>
+    <line x1="410" y1="200" x2="410" y2="230"/><line x1="450" y1="200" x2="450" y2="230"/>
+    <line x1="490" y1="200" x2="490" y2="230"/><line x1="530" y1="200" x2="530" y2="230"/>
+    <line x1="570" y1="200" x2="570" y2="230"/><line x1="610" y1="200" x2="610" y2="230"/>
+    <line x1="650" y1="200" x2="650" y2="230"/><line x1="690" y1="200" x2="690" y2="230"/>
+    <line x1="730" y1="200" x2="730" y2="230"/><line x1="770" y1="200" x2="770" y2="230"/>
+    <line x1="810" y1="200" x2="810" y2="230"/><line x1="850" y1="200" x2="850" y2="230"/>
+    <line x1="880" y1="200" x2="880" y2="230"/>
+  </g>
+  <line x1="306" y1="215" x2="894" y2="215" stroke="#ffffff" stroke-width="4"/>
+  <!-- 大网球装饰 -->
+  <circle cx="1080" cy="320" r="70" fill="#d8e830" opacity="0.95"/>
+  <path d="M1025 285 Q1080 320 1135 285" fill="none" stroke="#ffffff" stroke-width="8"/>
+  <path d="M1025 355 Q1080 320 1135 355" fill="none" stroke="#ffffff" stroke-width="8"/>
+  <!-- 文案区 -->
+  <rect x="0" y="0" width="640" height="400" fill="url(#overlay)"/>
+  <text x="70" y="185" font-family="Microsoft YaHei, Arial, sans-serif" font-size="52" font-weight="bold" fill="#ffffff">专业网球场地</text>
+  <text x="70" y="245" font-family="Microsoft YaHei, Arial, sans-serif" font-size="26" fill="#cfe6f5">标准硬地球场，专业级运动体验</text>
+</svg>

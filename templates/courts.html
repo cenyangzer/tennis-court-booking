@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}场地列表 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+    <div class="mb-4">
+        <h1>场地列表</h1>
+        <p>我们提供多种类型的网球场地，满足您的不同需求</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for court in courts %}
+        <div class="col">
+            <div class="card h-100">
+                {% if court.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' + court.image_url) }}" class="card-img-top" alt="{{ court.name }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default-court.svg') }}" class="card-img-top" alt="{{ court.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title mb-0">{{ court.name }}</h5>
+                        {% if court.status %}
+                        <span class="badge bg-success">可预约</span>
+                        {% else %}
+                        <span class="badge bg-danger">不可用</span>
+                        {% endif %}
+                    </div>
+                    <p class="card-text text-muted mb-3">场地类型：{{ court.type }}</p>
+                    <p class="card-text mb-4">{{ court.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-primary fw-bold">{{ format_price(court.price_per_hour) }}/小时</span>
+                        <a href="{{ url_for('court_detail', court_id=court.id) }}" class="btn btn-outline-primary">查看详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center" role="alert">
+                当前没有可用的场地信息
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if current_user and courts %}
+    <div class="mt-6 text-center">
+        <a href="{{ url_for('booking') }}" class="btn btn-primary btn-lg">立即预约</a>
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block css %}
+    <style>
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}添加评价 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">添加评价</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>预约信息</h3>
+                    <div class="bg-light p-4 rounded mb-4">
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>预约编号:</strong></div>
+                            <div class="col-md-8">#{{ booking.id }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>场地名称:</strong></div>
+                            <div class="col-md-8">{{ booking.court.name }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>预约时间:</strong></div>
+                            <div class="col-md-8">{{ format_datetime(booking.start_time) }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>结束时间:</strong></div>
+                            <div class="col-md-8">{{ format_datetime(booking.end_time) }}</div>
+                        </div>
+                    </div>
+
+                    <h3>请对本次预约进行评价</h3>
+                    <form method="POST" action="{{ url_for('add_review', booking_id=booking.id) }}">
+                        {{ form.hidden_tag() }}
+                        <div class="mb-4">
+                            <label class="form-label">{{ form.rating.label }}</label>
+                            {{ form.rating(class="form-select") }}
+                            {% if form.rating.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.rating.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">{{ form.comment.label }}</label>
+                            {{ form.comment(class="form-control", rows=5, placeholder="请输入您的评价内容...") }}
+                            {% if form.comment.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.comment.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <small class="form-text text-muted">评价内容最多500字</small>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('user_bookings') }}" class="btn btn-secondary">返回预约列表</a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-light p-4 rounded sticky-top">
+                        <h3>评价说明</h3>
+                        <div class="alert alert-info mb-4">
+                            <i class="fas fa-info-circle"></i> 您的评价将帮助我们不断改进服务质量，为其他用户提供参考。
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item"><i class="fas fa-star text-warning"></i> 请对场地质量进行客观评价</li>
+                            <li class="list-group-item"><i class="fas fa-star text-warning"></i> 请对服务态度进行评价</li>
+                            <li class="list-group-item"><i class="fas fa-star text-warning"></i> 您的评价内容将公开显示</li>
+                            <li class="list-group-item"><i class="fas fa-star text-warning"></i> 恶意评价将被删除</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 可以在这里添加评价页面相关的交互功能
+    });
+</script>
+{% endblock %}

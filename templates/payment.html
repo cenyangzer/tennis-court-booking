@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}支付 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">支付确认</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>预约信息</h3>
+                    <div class="bg-light p-4 rounded mb-4">
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>预约编号:</strong></div>
+                            <div class="col-md-8">{{ booking.id }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>场地名称:</strong></div>
+                            <div class="col-md-8">{{ booking.court.name }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>预约时间:</strong></div>
+                            <div class="col-md-8">{{ format_datetime(booking.start_time) }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>结束时间:</strong></div>
+                            <div class="col-md-8">{{ format_datetime(booking.end_time) }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>时长:</strong></div>
+                            <div class="col-md-8">
+                                {% set duration = (booking.end_time - booking.start_time).total_seconds() / 3600 %}
+                                {{ (duration * 100) | round | int / 100 }} 小时
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>选择支付方式</h3>
+                    {% if is_admin %}
+            <form action="{{ url_for('admin_process_payment', booking_id=booking.id) }}" method="POST">
+            {% else %}
+            <form action="{{ url_for('process_payment', booking_id=booking.id) }}" method="POST">
+            {% endif %}
+                        <div class="mb-4">
+                            {% for method in payment_methods %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="payment_method" id="method{{ loop.index }}" 
+                                    value="{{ method }}" {% if loop.first %}checked{% endif %}>
+                                <label class="form-check-label" for="method{{ loop.index }}">
+                                    {{ method }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            {% if is_admin %}
+                            <a href="{{ url_for('admin_bookings') }}" class="btn btn-secondary">返回管理员预约列表</a>
+                            {% else %}
+                            <a href="{{ url_for('user_bookings') }}" class="btn btn-secondary">返回预约列表</a>
+                            {% endif %}
+                            {% if is_admin %}
+                        <input type="hidden" name="admin_mode" value="true">
+                        <button type="submit" class="btn btn-primary">管理员确认支付</button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary">确认支付</button>
+                        {% endif %}
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-light p-4 rounded sticky-top">
+                        <h3>支付金额</h3>
+                        <div class="row mb-2">
+                            <div class="col-6">场地费用:</div>
+                            <div class="col-6 text-right">¥{{ booking.total_amount }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6">税费:</div>
+                            <div class="col-6 text-right">¥0.00</div>
+                        </div>
+                        <hr>
+                        <div class="row mb-4">
+                            <div class="col-6 font-weight-bold">总计:</div>
+                            <div class="col-6 text-right font-weight-bold text-primary">¥{{ booking.total_amount }}</div>
+                        </div>
+                        <div class="alert alert-info small">
+                            <i class="fas fa-info-circle"></i> 请确认您的预约信息无误后再进行支付。支付成功后，您将收到支付成功的确认通知。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 表单提交前的确认提示
+        document.querySelector('form').addEventListener('submit', function(event) {
+            if (!confirm('确认进行支付吗？支付成功后将无法取消。')) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+{% endblock %}

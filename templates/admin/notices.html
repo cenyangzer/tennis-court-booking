@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- 页面标题 -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        {% if current_user and current_user.is_admin %}
+        <h1 class="h3 mb-0 text-gray-800">公告管理</h1>
+        {% else %}
+        <h1 class="h3 mb-0 text-gray-800">公告列表</h1>
+        {% endif %}
+    </div>
+
+    <!-- 添加公告表单 (仅管理员可见) -->
+    {% if current_user and current_user.is_admin %}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">添加新公告</h6>
+        </div>
+        <div class="card-body">
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.title.label(class="form-label") }}
+                    {{ form.title(class="form-control", placeholder="输入公告标题") }}
+                    {% for error in form.title.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    {{ form.content.label(class="form-label") }}
+                    {{ form.content(class="form-control", rows=5, placeholder="输入公告内容") }}
+                    {% for error in form.content.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-3 form-check">
+                    {{ form.is_active(class="form-check-input") }}
+                    {{ form.is_active.label(class="form-check-label") }}
+                </div>
+                <button type="submit" class="btn btn-primary">发布公告</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 公告列表 -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">公告列表</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>标题</th>
+                            <th>内容摘要</th>
+                            <th>发布时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for notice in notices %}
+                        <tr>
+                            <td>{{ notice.title }}</td>
+                            <td>{{ notice.content[:100] }}...</td>
+                            <td>{{ format_datetime(notice.created_at) }}</td>
+                            <td>
+                                {% if notice.is_active %}
+                                <span class="badge bg-success">已发布</span>
+                                {% else %}
+                                <span class="badge bg-secondary">未发布</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('notice_detail', notice_id=notice.id) }}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </a>
+                                    {% if not notice.is_active %}
+                                    <a href="" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> 编辑
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 可以在这里添加公告管理相关的交互功能
+    });
+</script>
+{% endblock %}

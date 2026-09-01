@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <!-- 背景 -->
+  <rect width="600" height="400" fill="#f5f5f5" rx="8" ry="8"/>
+  
+  <!-- 网球场地 -->
+  <rect x="100" y="50" width="400" height="300" fill="#228b22" rx="4" ry="4"/>
+  
+  <!-- 边界线 -->
+  <rect x="110" y="60" width="380" height="280" fill="none" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- 中线 -->
+  <line x1="300" y1="60" x2="300" y2="340" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- 发球线 -->
+  <line x1="200" y1="60" x2="200" y2="340" stroke="#ffffff" stroke-width="2"/>
+  <line x1="400" y1="60" x2="400" y2="340" stroke="#ffffff" stroke-width="2"/>
+  
+  <!-- 网 -->
+  <line x1="110" y1="200" x2="490" y2="200" stroke="#ffffff" stroke-width="1" stroke-dasharray="5,5"/>
+  
+  <!-- 网球图标 -->
+  <circle cx="300" cy="200" r="40" fill="#ffffff"/>
+  <circle cx="300" cy="200" r="36" fill="#f5f5f5"/>
+  <circle cx="290" cy="190" r="15" fill="#228b22" opacity="0.2"/>
+  <path d="M270 200 Q300 160 330 200 Q300 240 270 200 Z" fill="#228b22" opacity="0.1"/>
+  
+  <!-- 文字说明 -->
+  <text x="300" y="370" font-family="Arial, sans-serif" font-size="16" fill="#666666" text-anchor="middle">网球场地</text>
+</svg>

@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- 页面标题 -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">预约管理</h1>
+    </div>
+
+    <!-- 搜索和筛选 -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">搜索预约</h6>
+        </div>
+        <div class="card-body">
+            <form action="" method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label for="booking_id" class="form-label">预约编号</label>
+                    <input type="text" class="form-control" id="booking_id" name="booking_id" placeholder="输入预约编号">
+                </div>
+                <div class="col-md-3">
+                    <label for="username" class="form-label">用户名称</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="输入用户名">
+                </div>
+                <div class="col-md-2">
+                    <label for="court_id" class="form-label">场地</label>
+                    <select class="form-select" id="court_id" name="court_id">
+                        <option value="">全部场地</option>
+                        {% for court in courts %}
+                        <option value="{{ court.id }}">{{ court.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="status" class="form-label">预约状态</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="">全部状态</option>
+                        <option value="pending">待确认</option>
+                        <option value="confirmed">已确认</option>
+                        <option value="cancelled">已取消</option>
+                        <option value="completed">已完成</option>
+                        <option value="no_show">未到场</option>
+                    </select>
+                </div>
+                <div class="col-md-2 align-self-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i> 搜索
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 预约列表 -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">预约列表</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>预约编号</th>
+                            <th>用户</th>
+                            <th>场地</th>
+                            <th>预约时间</th>
+                            <th>结束时间</th>
+                            <th>时长(小时)</th>
+                            <th>费用(元)</th>
+                            <th>预约状态</th>
+                            <th>支付状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings.items %}
+                        <tr>
+                            <td>{{ booking.id }}</td>
+                            <td>{{ booking.user.username }}</td>
+                            <td>{{ booking.court.name }}</td>
+                            <td>{{ booking.start_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>{{ booking.end_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>{{ round((booking.end_time - booking.start_time).total_seconds() / 3600, 2) }}</td>
+                            <td>¥{{ booking.total_amount }}</td>
+                            <td>
+                                {% if booking.status == 'pending' %}
+                                <span class="badge bg-warning">待确认</span>
+                                {% elif booking.status == 'confirmed' %}
+                                <span class="badge bg-success">已确认</span>
+                                {% elif booking.status == 'cancelled' %}
+                                <span class="badge bg-danger">已取消</span>
+                                {% elif booking.status == 'completed' %}
+                                <span class="badge bg-info">已完成</span>
+                                {% elif booking.status == 'no_show' %}
+                                <span class="badge bg-secondary">未到场</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if booking.payment_status == 'paid' %}
+                                <span class="badge bg-success">已支付</span>
+                                {% elif booking.payment_status == 'refunded' %}
+                                <span class="badge bg-info">已退款</span>
+                                {% else %}
+                                <span class="badge bg-danger">未支付</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ url_for('admin_bookings', booking_id=booking.id) }}" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </a>
+                                    {% if booking.status == 'pending' %}
+                                    <a href="{{ url_for('admin_confirm_booking', booking_id=booking.id) }}" class="btn btn-success btn-sm" onclick="return confirm('确定要确认该预约吗？')">
+                                        <i class="fas fa-check"></i> 确认
+                                    </a>
+                                    <a href="{{ url_for('admin_cancel_booking', booking_id=booking.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('确定要取消该预约吗？')">
+                                        <i class="fas fa-times"></i> 取消
+                                    </a>
+                                    {% endif %}
+                                    {% if booking.status == 'confirmed' %}
+                                    <a href="{{ url_for('admin_complete_booking', booking_id=booking.id) }}" class="btn btn-primary btn-sm" onclick="return confirm('确定要将该预约标记为已完成吗？')">
+                                        <i class="fas fa-check-circle"></i> 完成
+                                    </a>
+                                    {% endif %}
+                                    {% if booking.payment_status == 'unpaid' and booking.status in ['confirmed', 'completed'] %}
+                                    <a href="{{ url_for('admin_payment_page', booking_id=booking.id) }}" class="btn btn-warning btn-sm" onclick="return confirm('确定要为该预约进行支付操作吗？')">
+                                        <i class="fas fa-credit-card"></i> 支付
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- 分页 -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-4">
+                    {% if bookings.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ bookings.prev_num }}{% if request.args.booking_id %}&booking_id={{ request.args.booking_id }}{% endif %}{% if request.args.username %}&username={{ request.args.username }}{% endif %}{% if request.args.court_id %}&court_id={{ request.args.court_id }}{% endif %}{% if request.args.status %}&status={{ request.args.status }}{% endif %}">上一页</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">上一页</span>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in bookings.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                    {% if page_num %}
+                    {% if bookings.page == page_num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_num }}{% if request.args.booking_id %}&booking_id={{ request.args.booking_id }}{% endif %}{% if request.args.username %}&username={{ request.args.username }}{% endif %}{% if request.args.court_id %}&court_id={{ request.args.court_id }}{% endif %}{% if request.args.status %}&status={{ request.args.status }}{% endif %}">{{ page_num }}</a>
+                    </li>
+                    {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if bookings.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ bookings.next_num }}{% if request.args.booking_id %}&booking_id={{ request.args.booking_id }}{% endif %}{% if request.args.username %}&username={{ request.args.username }}{% endif %}{% if request.args.court_id %}&court_id={{ request.args.court_id }}{% endif %}{% if request.args.status %}&status={{ request.args.status }}{% endif %}">下一页</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">下一页</span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 可以在这里添加预约管理相关的交互功能
+    });
+</script>
+{% endblock %}

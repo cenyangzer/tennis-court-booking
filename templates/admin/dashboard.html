@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% block title %}管理员仪表盘 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+    <div class="mb-4">
+        <h1>管理员仪表盘</h1>
+        <p>欢迎回来，{{ current_user.username }}！这是系统的运行概况</p>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-5 g-4 mb-6">
+        <div class="col">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">总用户数</h5>
+                            <p class="card-text display-4">{{ total_users }}</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-people" viewBox="0 0 16 16">
+                            <path d="M15 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h14zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.232 3.16-1.276zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">场地数量</h5>
+                            <p class="card-text display-4">{{ total_courts }}</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+                            <path d="M4 0a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm-1 12V2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>
+                            <path d="M3 5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5zm3 3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V8zm3 3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">总预约数</h5>
+                            <p class="card-text display-4">{{ total_bookings }}</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                            <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">待确认预约</h5>
+                            <p class="card-text display-4">{{ pending_bookings }}</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title">今日预约</h5>
+                            <p class="card-text display-4">{{ today_bookings }}</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-calendar-day" viewBox="0 0 16 16">
+                            <path d="M4.684 11.523v-2.3h2.261v-.61H4.684V6.801h2.464v-.61H4v5.332h.684zm3.296 0v-2.3h2.633V9.19h-2.633v-.61h2.115V6.801h-2.115v-.61h3.73v5.332H7.98zm3.015 0v-2.3h1.987v-.61H10.97v-.61h2.061V6.801h-2.061v-.61h2.233V4h-3.27v5.523h.968zm-1.046-5.116h.676V5.99h-.676v.504zm-1.33 3.217h.676V9.19h-.676v-.504z"/>
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 快速操作 -->
+    <div class="card mb-6">
+        <div class="card-header bg-light">
+            <h4 class="mb-0">快速操作</h4>
+        </div>
+        <div class="card-body">
+            <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-4">
+                <a href="{{ url_for('admin_users') }}" class="text-decoration-none">
+                    <div class="card text-center p-4 bg-primary bg-opacity-10 hover:bg-opacity-20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#0d6efd" class="bi bi-people" viewBox="0 0 16 16">
+                            <path d="M15 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h14zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.232 3.16-1.276zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                        </svg>
+                        <h5 class="mt-3">用户管理</h5>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('admin_reviews') }}" class="text-decoration-none">
+                    <div class="card text-center p-4 bg-info bg-opacity-10 hover:bg-opacity-20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#0dcaf0" class="bi bi-star" viewBox="0 0 16 16">
+                            <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                        </svg>
+                        <h5 class="mt-3">评价管理</h5>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('admin_courts') }}" class="text-decoration-none">
+                    <div class="card text-center p-4 bg-success bg-opacity-10 hover:bg-opacity-20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#198754" class="bi bi-building" viewBox="0 0 16 16">
+                            <path d="M4 0a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm-1 12V2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>
+                            <path d="M3 5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5zm3 3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V8zm3 3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-1z"/>
+                        </svg>
+                        <h5 class="mt-3">场地管理</h5>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('admin_bookings') }}" class="text-decoration-none">
+                    <div class="card text-center p-4 bg-warning bg-opacity-10 hover:bg-opacity-20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#ffc107" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                            <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                        </svg>
+                        <h5 class="mt-3">预约管理</h5>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('admin_notices') }}" class="text-decoration-none">
+                    <div class="card text-center p-4 bg-info bg-opacity-10 hover:bg-opacity-20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#0dcaf0" class="bi bi-bullhorn" viewBox="0 0 16 16">
+                            <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm-8 8a2 2 0 1 1 4 0v4a2 2 0 0 1-4 0v-4zm8-1V9a4 4 0 0 0-3-3.87A4 4 0 0 0 4 9v4h8z"/>
+                        </svg>
+                        <h5 class="mt-3">公告管理</h5>
+                    </div>
+                </a>
+                
+                <a href="{{ url_for('logout') }}" class="text-decoration-none">
+                    <div class="card text-center p-4 bg-danger bg-opacity-10 hover:bg-opacity-20 transition-all">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#dc3545" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                            <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                        </svg>
+                        <h5 class="mt-3">退出登录</h5>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 系统信息 -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h4 class="mb-0">系统信息</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>系统状态</h5>
+                    <ul class="list-group mt-2">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>运行状态</span>
+                            <span class="badge bg-success">正常运行</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>数据库连接</span>
+                            <span class="badge bg-success">已连接</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>最后备份</span>
+                            <span class="text-muted">2023-05-15 00:00:00</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <!-- 最近活动
+                    <h5>最近活动</h5>
+                    <ul class="list-group mt-2">
+                        <li class="list-group-item">管理员登录系统</li>
+                        <li class="list-group-item">用户完成预约</li>
+                        <li class="list-group-item">场地状态更新</li>
+                    </ul>
+                    -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    <style>
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+{% endblock %}

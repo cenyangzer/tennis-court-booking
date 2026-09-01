@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ notice.title }} - 公告详情{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h1 class="h3 mb-0">{{ notice.title }}</h1>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <small class="text-muted">发布时间: {{ format_datetime(notice.created_at, '%Y-%m-%d %H:%M:%S') }}</small>
+                {% if notice.updated_at != notice.created_at %}
+                <small class="text-muted ml-3">更新时间: {{ format_datetime(notice.updated_at, '%Y-%m-%d %H:%M:%S') }}</small>
+                {% endif %}
+            </div>
+            
+            <div class="notice-content">
+                <p>{{ notice.content }}</p>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ url_for('notices') }}" class="btn btn-secondary">返回公告列表</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

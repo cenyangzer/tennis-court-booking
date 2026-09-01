@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}个人资料 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>个人资料</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('user_profile') }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.phone.label(class="form-label") }}
+                            {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else "")) }}
+                            {% if form.phone.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.phone.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="fs-5 mb-0">账号安全提示</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h5 class="fs-6">安全建议</h5>
+                        <ul class="list-disc list-inside text-muted">
+                            <li>定期修改密码</li>
+                            <li>使用强密码（包含字母、数字和特殊字符）</li>
+                            <li>不要与他人共享账号信息</li>
+                            <li>在公共设备上使用后记得退出登录</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h5 class="fs-6">账号信息</h5>
+                        <p class="text-muted"><strong>注册时间：</strong>{{ format_datetime(current_user.created_at) }}</p>
+                        <p class="text-muted"><strong>用户类型：</strong>{{ '管理员' if current_user.is_admin else '普通用户' }}</p>
+                    </div>
+                    
+                    <div>
+                        <h5 class="fs-6">帮助与支持</h5>
+                        <p class="text-muted">如有账号问题，请联系客服：</p>
+                        <p class="text-muted"><strong>邮箱：</strong>support@tennisbook.com</p>
+                        <p class="text-muted"><strong>电话：</strong>123-4567-8910</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>修改密码</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('user_change_password') }}">
+                        {{ password_form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            {{ password_form.current_password.label(class="form-label") }}
+                            {{ password_form.current_password(class="form-control" + (" is-invalid" if password_form.current_password.errors else "")) }}
+                            {% if password_form.current_password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in password_form.current_password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ password_form.new_password.label(class="form-label") }}
+                            {{ password_form.new_password(class="form-control" + (" is-invalid" if password_form.new_password.errors else "")) }}
+                            {% if password_form.new_password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in password_form.new_password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ password_form.confirm_new_password.label(class="form-label") }}
+                            {{ password_form.confirm_new_password(class="form-control" + (" is-invalid" if password_form.confirm_new_password.errors else "")) }}
+                            {% if password_form.confirm_new_password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in password_form.confirm_new_password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-grid">
+                            {{ password_form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    <style>
+        .card {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+{% endblock %}

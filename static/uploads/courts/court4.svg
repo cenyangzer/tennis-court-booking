@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ecdf0"/>
+      <stop offset="1" stop-color="#e2f2ff"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4d9e4a"/>
+      <stop offset="1" stop-color="#3a7d38"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#sky)"/>
+  <ellipse cx="130" cy="55" rx="55" ry="17" fill="#ffffff" opacity="0.8"/>
+  <ellipse cx="470" cy="65" rx="70" ry="19" fill="#ffffff" opacity="0.7"/>
+  <!-- 深绿背景带 -->
+  <rect x="20" y="160" width="560" height="60" fill="#2c6630"/>
+  <rect x="20" y="60" width="560" height="110" fill="none" stroke="#5a6b78" stroke-width="4"/>
+  <!-- 草地场地 -->
+  <polygon points="90,240 510,240 580,380 20,380" fill="url(#grass)"/>
+  <polygon points="90,240 510,240 580,380 20,380" fill="none" stroke="#f2f7ee" stroke-width="3"/>
+  <g fill="#5aad55" opacity="0.6">
+    <polygon points="90,240 510,240 465,278 135,278"/>
+  </g>
+  <g stroke="#f2f7ee" stroke-width="2.5">
+    <line x1="150" y1="240" x2="110" y2="380"/>
+    <line x1="450" y1="240" x2="490" y2="380"/>
+    <line x1="128" y1="310" x2="472" y2="310"/>
+    <line x1="140" y1="275" x2="460" y2="275"/>
+  </g>
+  <!-- 草纹 -->
+  <g stroke="#2f6b30" stroke-width="1.5" opacity="0.5">
+    <line x1="60" y1="300" x2="540" y2="300"/>
+    <line x1="45" y1="330" x2="555" y2="330"/>
+    <line x1="30" y1="360" x2="570" y2="360"/>
+  </g>
+  <!-- 球网 -->
+  <rect x="140" y="212" width="6" height="34" fill="#24352a"/>
+  <rect x="454" y="212" width="6" height="34" fill="#24352a"/>
+  <rect x="143" y="216" width="314" height="26" fill="#f4f6f2" opacity="0.92"/>
+  <g stroke="#93a396" stroke-width="1">
+    <line x1="170" y1="216" x2="170" y2="242"/><line x1="200" y1="216" x2="200" y2="242"/>
+    <line x1="230" y1="216" x2="230" y2="242"/><line x1="260" y1="216" x2="260" y2="242"/>
+    <line x1="290" y1="216" x2="290" y2="242"/><line x1="320" y1="216" x2="320" y2="242"/>
+    <line x1="350" y1="216" x2="350" y2="242"/><line x1="380" y1="216" x2="380" y2="242"/>
+    <line x1="410" y1="216" x2="410" y2="242"/><line x1="440" y1="216" x2="440" y2="242"/>
+  </g>
+  <line x1="143" y1="229" x2="457" y2="229" stroke="#ffffff" stroke-width="3"/>
+  <!-- 网球 -->
+  <circle cx="210" cy="332" r="15" fill="#d8e830" stroke="#b3c22a" stroke-width="2"/>
+  <path d="M199 325 Q210 332 221 325" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+  <path d="M199 339 Q210 332 221 339" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+</svg>

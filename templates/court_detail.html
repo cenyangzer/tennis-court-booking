@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ court.name }} - 网球馆预约系统{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                {% if court.image_url %}
+                <img src="{{ url_for('static', filename='uploads/' + court.image_url) }}" class="card-img-top" alt="{{ court.name }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default-court.svg') }}" class="card-img-top" alt="{{ court.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title mb-0">{{ court.name }}</h1>
+                        {% if court.status %}
+                        <span class="badge bg-success fs-5">可预约</span>
+                        {% else %}
+                        <span class="badge bg-danger fs-5">不可用</span>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <span class="badge bg-primary">{{ court.type }}</span>
+                        <span class="ms-3 text-primary fw-bold">{{ format_price(court.price_per_hour) }}/小时</span>
+                    </div>
+                    <div class="mb-4">
+                        <h3 class="fs-5">场地描述</h3>
+                        <p class="card-text">{{ court.description }}</p>
+                    </div>
+                    {% if court.status and current_user %}
+                    <div class="d-grid">
+                        <a href="{{ url_for('booking', court_id=court.id) }}" class="btn btn-primary btn-lg">立即预约此场地</a>
+                    </div>
+                    {% elif not court.status %}
+                    <div class="alert alert-warning" role="alert">
+                        该场地目前不可用，请选择其他场地
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info" role="alert">
+                        请先<a href="{{ url_for('login') }}" class="alert-link">登录</a>后再进行预约
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="fs-5 mb-0">用户评价</h3>
+                </div>
+                <div class="card-body">
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="mb-4 pb-4 border-bottom">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-semibold">{{ review.user.username }}</span>
+                                <span class="text-muted">{{ format_datetime(review.created_at) }}</span>
+                            </div>
+                            <div class="mb-2">
+                                {% for i in range(5) %}
+                                    {% if i < review.rating %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star text-warning" viewBox="0 0 16 16">
+                                        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                    </svg>
+                                    {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                        <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                    </svg>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <p class="text-muted">{{ review.comment or '暂无评价内容' }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center text-muted py-4">
+                            暂无评价
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-6">
+        <h2>相关场地</h2>
+        <div class="row row-cols-1 row-cols-md-4 g-4 mt-3">
+            {% for related_court in courts %}
+                {% if related_court.id != court.id and related_court.status %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if related_court.image_url %}
+                        <img src="{{ url_for('static', filename='uploads/' + related_court.image_url) }}" class="card-img-top" alt="{{ related_court.name }}">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/default-court.svg') }}" class="card-img-top" alt="{{ related_court.name }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ related_court.name }}</h5>
+                            <p class="card-text text-muted mb-2">{{ related_court.type }}</p>
+                            <p class="card-text text-primary fw-bold mb-3">{{ format_price(related_court.price_per_hour) }}/小时</p>
+                            <a href="{{ url_for('court_detail', court_id=related_court.id) }}" class="btn btn-outline-primary w-100">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    <style>
+        .card-img-top {
+            height: 300px;
+            object-fit: cover;
+        }
+    </style>
+{% endblock %}

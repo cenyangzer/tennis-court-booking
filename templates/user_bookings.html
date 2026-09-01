@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}我的预约 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+    <div class="mb-4">
+        <h1>我的预约</h1>
+        <p>查看和管理您的所有场地预约记录</p>
+    </div>
+
+    {% if bookings %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th scope="col">预约编号</th>
+                    <th scope="col">场地名称</th>
+                    <th scope="col">预约时间</th>
+                    <th scope="col">费用</th>
+                    <th scope="col">状态</th>
+                    <th scope="col">支付状态</th>
+                    <th scope="col">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>#{{ booking.id }}</td>
+                    <td>{{ booking.court.name }}</td>
+                    <td>
+                        {{ format_datetime(booking.start_time) }} - {{ format_datetime(booking.end_time) }}
+                    </td>
+                    <td>{{ format_price(booking.total_amount) }}</td>
+                    <td>
+                        {% if booking.status == 'pending' %}
+                        <span class="badge bg-warning">{{ get_status_text(booking.status) }}</span>
+                        {% elif booking.status == 'confirmed' %}
+                        <span class="badge bg-success">{{ get_status_text(booking.status) }}</span>
+                        {% elif booking.status == 'canceled' %}
+                        <span class="badge bg-danger">{{ get_status_text(booking.status) }}</span>
+                        {% elif booking.status == 'completed' %}
+                        <span class="badge bg-primary">{{ get_status_text(booking.status) }}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                    {% if booking.payment_status == 'unpaid' %}
+                    <span class="badge bg-warning">{{ get_status_text(booking.payment_status) }}</span>
+                    {% elif booking.payment_status == 'paid' %}
+                    <span class="badge bg-success">{{ get_status_text(booking.payment_status) }}</span>
+                    {% elif booking.payment_status == 'refunded' %}
+                    <span class="badge bg-info">{{ get_status_text(booking.payment_status) }}</span>
+                    {% endif %}
+                </td>
+                    <td>
+                    {% if booking.status == 'completed' and not booking.review %}
+                    <a href="{{ url_for('add_review', booking_id=booking.id) }}" class="btn btn-sm btn-outline-primary">评价</a>
+                    {% elif (booking.status == 'confirmed' or booking.status == 'completed') and booking.payment_status == 'unpaid' %}
+                    <a href="{{ url_for('payment_page', booking_id=booking.id) }}" class="btn btn-sm btn-primary">去支付</a>
+                    {% elif booking.status == 'confirmed' %}
+                    {% if booking.payment_status == 'paid' %}
+                    <a href="{{ url_for('payment_page', booking_id=booking.id) }}" class="btn btn-sm btn-primary">去支付</a>
+                    {% endif %}
+                    <a href="{{ url_for('user_cancel_booking', booking_id=booking.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('确定要取消此预约吗？预约开始前2小时内取消将收取30%费用');">取消预约</a>
+                    {% elif booking.status == 'pending' %}
+                    <button class="btn btn-sm btn-outline-danger" disabled>取消</button>
+                    <span class="text-muted ms-1">(请联系管理员)</span>
+                    {% else %}
+                    <span class="text-muted">无操作</span>
+                    {% endif %}
+                </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        <h4 class="alert-heading">暂无预约记录</h4>
+        <p>您还没有任何预约记录，点击下方按钮开始预约吧！</p>
+        <hr>
+        <a href="{{ url_for('booking') }}" class="btn btn-primary">立即预约</a>
+    </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">预约状态说明</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="d-flex items-center">
+                            <span class="badge bg-warning me-2">待确认</span>
+                            <span>预约申请已提交，等待管理员确认</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex items-center">
+                            <span class="badge bg-success me-2">已确认</span>
+                            <span>预约已确认，可以按时使用场地</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex items-center">
+                            <span class="badge bg-danger me-2">已取消</span>
+                            <span>预约已取消，无法使用场地</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex items-center">
+                            <span class="badge bg-primary me-2">已完成</span>
+                            <span>预约已完成，感谢您的使用</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-3 bg-warning bg-opacity-10 rounded">
+                    <h6 class="text-warning mb-2"><i class="fas fa-exclamation-triangle"></i> 取消预约政策</h6>
+                    <p>1. 预约开始前2小时可免费取消，全额退款</p>
+                    <p>2. 预约开始前2小时内取消将收取30%费用，退还70%</p>
+                    <p>3. 待确认状态的预约需要联系管理员取消</p>
+                    <p>4. 已完成的预约不支持取消</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    <style>
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+{% endblock %}

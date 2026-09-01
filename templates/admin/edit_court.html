@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">编辑场地信息</h2>
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            场地 #{{ court.id }}: {{ court.name }}
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control", placeholder="场地名称") }}
+                    {% if form.name.errors %}
+                        <div class="text-danger">
+                            {% for error in form.name.errors %}
+                                <small>{{ error }}</small><br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.type.label(class="form-label") }}
+                    {{ form.type(class="form-control", placeholder="场地类型") }}
+                    {% if form.type.errors %}
+                        <div class="text-danger">
+                            {% for error in form.type.errors %}
+                                <small>{{ error }}</small><br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.description.label(class="form-label") }}
+                    {{ form.description(class="form-control", rows="4", placeholder="场地描述") }}
+                    {% if form.description.errors %}
+                        <div class="text-danger">
+                            {% for error in form.description.errors %}
+                                <small>{{ error }}</small><br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.price_per_hour.label(class="form-label") }}
+                    <div class="input-group">
+                        <span class="input-group-text">¥</span>
+                        {{ form.price_per_hour(class="form-control", placeholder="每小时价格") }}
+                    </div>
+                    {% if form.price_per_hour.errors %}
+                        <div class="text-danger">
+                            {% for error in form.price_per_hour.errors %}
+                                <small>{{ error }}</small><br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.image.label(class="form-label") }}
+                    {{ form.image(class="form-control") }}
+                    {% if form.image.errors %}
+                        <div class="text-danger">
+                            {% for error in form.image.errors %}
+                                <small>{{ error }}</small><br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    {% if court.image_url %}
+                        <div class="mt-2">
+                            <small>当前图片：</small>
+                            <img src="{{ url_for('static', filename='uploads/' + court.image_url) }}" alt="{{ court.name }}" class="img-thumbnail" style="max-width: 200px;">
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    {{ form.status.label(class="form-check-label") }}
+                    {{ form.status(class="form-check-input") }}
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    {{ form.submit(class="btn btn-primary") }}
+                    <a href="{{ url_for('admin_courts') }}" class="btn btn-secondary">取消</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

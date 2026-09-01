@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}编辑评价 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">编辑评价</h2>
+                </div>
+                <div class="card-body">
+                    <!-- 评价信息 -->
+                    <div class="bg-light p-4 rounded mb-4">
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>评价ID:</strong></div>
+                            <div class="col-md-8">{{ review.id }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>用户名称:</strong></div>
+                            <div class="col-md-8">{{ review.user.username }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>场地名称:</strong></div>
+                            <div class="col-md-8">{{ review.court.name }}</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-4"><strong>评价时间:</strong></div>
+                            <div class="col-md-8">{{ format_datetime(review.created_at) }}</div>
+                        </div>
+                    </div>
+
+                    <h3>编辑评价内容</h3>
+                    <form method="POST" action="{{ url_for('admin_edit_review', review_id=review.id) }}">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-4">
+                            <label class="form-label">{{ form.rating.label }}</label>
+                            {{ form.rating(class="form-select") }}
+                            {% if form.rating.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.rating.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">{{ form.comment.label }}</label>
+                            {{ form.comment(class="form-control", rows=5, placeholder="请输入评价内容...") }}
+                            {% if form.comment.errors %}
+                            <div class="text-danger mt-1">
+                                {% for error in form.comment.errors %}
+                                <small>{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="text-muted mt-1">
+                                <small>最多500个字符</small>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            {{ form.submit(class="btn btn-primary") }}
+                            <a href="{{ url_for('admin_reviews') }}" class="btn btn-secondary">取消</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

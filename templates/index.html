@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+
+{% block title %}首页 - 网球馆预约系统{% endblock %}
+
+{% block content %}
+    <!-- 轮播图 -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://picsum.photos/id/1001/1200/400" class="d-block w-100" alt="网球场">
+                <div class="carousel-caption d-none d-md-block">
+                        <div class="bg-dark bg-opacity-10 p-3 rounded">
+                            <h5>欢迎来到网球馆预约系统</h5>
+                            <p>专业的网球场地，优质的服务体验</p>
+                        </div>
+                    </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='images/banner2.svg') }}" class="d-block w-100" alt="网球比赛">
+                <div class="carousel-caption d-none d-md-block">
+                    <div class="bg-dark bg-opacity-10 p-3 rounded">
+                        <h5>多样化的场地选择</h5>
+                        <p>硬地、红地、草地等，满足各类水平人群不同需求</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{{ url_for('static', filename='images/banner3.svg') }}" class="d-block w-100" alt="网球场照明">
+                <div class="carousel-caption d-none d-md-block">
+                    <div class="bg-dark bg-opacity-10 p-3 rounded">
+                        <h5>专业的照明系统</h5>
+                        <p>夜间也能享受高质量的网球体验</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    <!-- 快速预约 -->
+    <div class="card mt-5">
+        <div class="card-body bg-primary bg-opacity-10">
+            <h2 class="card-title text-center mb-4">快速预约</h2>
+            <p class="text-center mb-4">只需几步，轻松预约您心仪的场地</p>
+            <div class="d-flex justify-content-center">
+                <a href="{{ url_for('booking') }}" class="btn btn-primary btn-lg">立即预约</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 场地展示 -->
+    <section class="mt-5">
+        <h2 class="text-center mb-5">场地展示</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for court in courts %}
+            <div class="col">
+                <div class="card h-100">
+                    {% if court.image_url %}
+                    <img src="{{ url_for('static', filename='uploads/' + court.image_url) }}" class="card-img-top" alt="{{ court.name }}">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/default-court.svg') }}" class="card-img-top" alt="{{ court.name }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ court.name }}</h5>
+                        <p class="card-text text-muted">{{ court.type }}</p>
+                        <p class="card-text">{{ court.description[:80] }}{% if court.description|length > 80 %}...{% endif %}</p>
+                        <div class="mt-3 d-flex justify-content-between align-items-center">
+                            <span class="text-primary fw-bold">{{ format_price(court.price_per_hour) }}/小时</span>
+                            {% if court.status %}
+                            <span class="badge bg-success">可预约</span>
+                            {% else %}
+                            <span class="badge bg-danger">不可用</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ url_for('court_detail', court_id=court.id) }}" class="btn btn-outline-primary w-100">查看详情</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('courts') }}" class="btn btn-outline-primary">查看全部场地</a>
+        </div>
+    </section>
+
+    <!-- 最新公告 -->
+    <section class="mt-5 mb-5">
+        <h2 class="text-center mb-5">最新公告</h2>
+        <div class="row">
+            {% for notice in notices %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ notice.title }}</h5>
+                        <p class="card-text text-muted">发布时间：{{ format_datetime(notice.created_at) }}</p>
+                        <p class="card-text">{{ notice.content[:100] }}{% if notice.content|length > 100 %}...{% endif %}</p>
+                        <a href="{{ url_for('notice_detail', notice_id=notice.id) }}" class="text-primary">查看详情</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('notices') }}" class="btn btn-outline-primary">查看全部公告</a>
+        </div>
+    </section>
+
+    <!-- 服务特色 -->
+    <section class="bg-light py-5 mt-5">
+        <h2 class="text-center mb-5">服务特色</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#0d6efd" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                                <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+                            </svg>
+                        </div>
+                        <h5 class="card-title">在线预约</h5>
+                        <p class="card-text">24小时在线预约，无需等待，轻松便捷</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#0d6efd" class="bi bi-star" viewBox="0 0 16 16">
+                                <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                            </svg>
+                        </div>
+                        <h5 class="card-title">专业场地</h5>
+                        <p class="card-text">高标准场地维护，提供最佳的运动体验</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#0d6efd" class="bi bi-headset" viewBox="0 0 16 16">
+                                <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5z"/>
+                            </svg>
+                        </div>
+                        <h5 class="card-title">贴心服务</h5>
+                        <p class="card-text">专业教练指导，优质的客户服务体验</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        // 轮播图自动播放
+        document.addEventListener('DOMContentLoaded', function() {
+            var carousel = new bootstrap.Carousel(document.getElementById('carouselExampleIndicators'), {
+                interval: 5000,
+                wrap: true
+            });
+        });
+    </script>
+{% endblock %}

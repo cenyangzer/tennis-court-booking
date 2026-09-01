@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 虚拟环境
+.venv/
+
+# IDE
+.idea/
+
+# 数据库（通过 flask init-db 自动生成）
+*.db
+instance/
+
+# 敏感/临时文件
+cookies.txt
+*.log
+.env
+mimo.py
+get-pip.py
+
+# 系统文件
+.DS_Store
+Thumbs.db
