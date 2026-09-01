@@ -24,12 +24,10 @@
 ## 目录结构
 
 ```
-wqgyy/
-├── .idea/                  # PyCharm项目配置
-├── .venv/                  # Python虚拟环境
+tennis-court-booking/
 ├── static/                 # 静态资源目录
 │   ├── css/               # 样式文件
-│   ├── images/            # 图片资源
+│   ├── images/            # 图片资源（轮播横幅等）
 │   ├── js/                # JavaScript脚本
 │   └── uploads/courts/    # 场地图片上传目录
 ├── templates/             # HTML模板文件
@@ -53,8 +51,11 @@ wqgyy/
 ├── utils.py               # 工具函数
 ├── config.py              # 配置文件
 ├── requirements.txt       # 项目依赖
-├── database.db            # SQLite数据库
-└── simple_start.py        # 快速启动脚本
+├── simple_start.py        # 快速启动脚本
+├── LICENSE                # MIT开源协议
+└── README.md              # 项目说明
+
+注：database.db 不会随仓库分发，首次启动前通过初始化命令自动生成
 ```
 
 ## 数据库设计
@@ -70,8 +71,8 @@ wqgyy/
 
 ## 开发环境
 
-- 操作系统：Windows
-- Python版本：3.12
+- 操作系统：Windows / Linux / macOS
+- Python版本：3.11+
 - Flask版本：2.x
 - 数据库：SQLite 3
 
@@ -135,3 +136,7 @@ python -m flask run
 - [x] 后端功能实现
 - [x] 系统测试与优化
 - [x] 项目文档编写
+
+## 开源协议
+
+本项目基于 [MIT License](LICENSE) 开源，欢迎学习、使用和改进。
