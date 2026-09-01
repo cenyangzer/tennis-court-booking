@@ -6,6 +6,14 @@ from models import db, User, Court, Booking, Review, Notice, CourtAvailability
 from forms import LoginForm, RegistrationForm, BookingForm, ReviewForm, UserProfileForm, CourtForm, NoticeForm, UserForm, AddUserForm, PasswordChangeForm
 from utils import login_required, admin_required, get_current_user, calculate_booking_cost, format_datetime, format_price, get_status_text, allowed_file
 import uuid  # 用于生成支付订单号
+from urllib.parse import urlparse, urljoin
+
+
+def is_safe_url(target):
+    """校验重定向目标是否为本站地址，防止开放重定向"""
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 def init_routes(app):
     """初始化所有路由"""
@@ -35,7 +43,9 @@ def init_routes(app):
                 session['is_admin'] = user.is_admin
                 flash('登录成功', 'success')
                 next_page = request.args.get('next')
-                return redirect(next_page or url_for('index'))
+                if not next_page or not is_safe_url(next_page):
+                    next_page = url_for('index')
+                return redirect(next_page)
             flash('用户名或密码错误', 'danger')
         return render_template('login.html', form=form)
     
@@ -817,10 +827,9 @@ def init_routes(app):
     @app.context_processor
     def utility_processor():
         """注入工具函数到模板"""
-        from utils import format_datetime, format_price, get_status_text, truncate_decimal
+        from utils import format_datetime, format_price, get_status_text
         return {
             'format_datetime': format_datetime,
             'format_price': format_price,
-            'get_status_text': get_status_text,
-            'truncate_decimal': truncate_decimal
+            'get_status_text': get_status_text
         }

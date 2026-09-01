@@ -1,25 +1,31 @@
 from flask import Flask
 from config import config
 from models import db
+from flask_wtf.csrf import CSRFProtect
 from routes import init_routes
 import os
 from datetime import datetime
+
+csrf = CSRFProtect()
 
 def create_app(config_name=None):
     """创建Flask应用实例"""
     if config_name is None:
         config_name = os.environ.get('FLASK_CONFIG', 'default')
-    
+
     app = Flask(__name__)
     app.config.from_object(config[config_name])
-    
+
     # 添加上下文处理器，提供当前时间和round函数
     @app.context_processor
     def inject_now():
         return {'now': datetime.now(), 'round': round}
-    
+
     # 初始化数据库
     db.init_app(app)
+
+    # 启用全局CSRF保护（所有POST请求需携带csrf_token）
+    csrf.init_app(app)
     
     # 初始化路由
     init_routes(app)
