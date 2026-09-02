@@ -51,7 +51,7 @@ tennis-court-booking/
 ├── utils.py               # 工具函数
 ├── config.py              # 配置文件
 ├── requirements.txt       # 项目依赖
-├── simple_start.py        # 快速启动脚本
+├── run_server.py          # 服务器启动脚本
 ├── LICENSE                # MIT开源协议
 └── README.md              # 项目说明
 
@@ -78,12 +78,12 @@ tennis-court-booking/
 
 ## 快速开始
 
-### 方式一：使用启动脚本
+### 方式一：直接启动
 
-直接运行启动脚本，系统将自动完成环境配置和服务器启动：
+初始化数据库后直接运行服务器（无调试模式）：
 
 ```bash
-python simple_start.py
+python run_server.py
 ```
 
 ### 方式二：手动启动
@@ -104,14 +104,14 @@ pip install -r requirements.txt
 3. 初始化数据库：
 
 ```bash
-python -c "from app import app, init_db; app.app_context().push(); init_db()"
+set FLASK_APP=app.py
+flask init-db
 ```
 
 4. 启动Flask服务器：
 
 ```bash
-set FLASK_APP=app.py
-python -m flask run
+python run_server.py
 ```
 
 ### 访问系统
